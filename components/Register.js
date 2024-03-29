@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     position: "relative", // Sử dụng position: "relative" để phần tử con có thể sử dụng position: "absolute" để định v
   },
   logoImage: {
-    width: 450, // Thay đổi kích thước theo ý của bạn
+    width: 451, // Thay đổi kích thước theo ý của bạn
     height: 240, // Thay đổi kích thước theo ý của bạn
   },
   logoContainer: {
