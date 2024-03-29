@@ -6,7 +6,7 @@ import Login from "./components/Login";
 import Carousel from "./components/Carousel";
 import Start from "./components/Start";
 import Register from "./components/Register";
-
+import AdminForm from "./components/AdminForm";
 
 const StackNavigation = () => {
   const Stack = createNativeStackNavigator();
@@ -31,6 +31,11 @@ const StackNavigation = () => {
         <Stack.Screen
           name="Carousel"
           component={Carousel}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AdminForm"
+          component={AdminForm}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

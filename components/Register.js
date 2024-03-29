@@ -8,15 +8,19 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import {Picker} from '@react-native-picker/picker'
+import { Picker } from "@react-native-picker/picker";
 import { Image } from "react-native";
 import React, { useState, useEffect } from "react";
-
+import { useNavigation } from "@react-navigation/native";
 const Register = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-      <Image source={require('../assets/logo.jpg')} style={styles.logoImage} />
+        <Image
+          source={require("../assets/logo.jpg")}
+          style={styles.logoImage}
+        />
         <Text style={styles.slogan}>KARAOKE</Text>
       </View>
       <Picker
@@ -33,8 +37,7 @@ const Register = () => {
         keyboardType="email-address"
       />
       <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-      
-      
+
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Đăng kí</Text>
       </TouchableOpacity>

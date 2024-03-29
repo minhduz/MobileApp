@@ -9,13 +9,18 @@ import {
   Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import {Picker} from '@react-native-picker/picker'
+import { Picker } from "@react-native-picker/picker";
 import { Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 const Login = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-      <Image source={require('../assets/logo.jpg')} style={styles.logoImage} />
+        <Image
+          source={require("../assets/logo.jpg")}
+          style={styles.logoImage}
+        />
         <Text style={styles.slogan}>New slogan</Text>
       </View>
 
@@ -33,8 +38,11 @@ const Login = () => {
         <Picker.Item label="Admin" value="admin" />
         <Picker.Item label="Contributor" value="ctv" />
       </Picker>
-      
-      <TouchableOpacity style={styles.button}>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate("AdminForm")}
+        style={styles.button}
+      >
         <Text style={styles.buttonText}>Log In / Sign Up</Text>
       </TouchableOpacity>
     </View>
