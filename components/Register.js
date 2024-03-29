@@ -8,25 +8,35 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
+import {Picker} from '@react-native-picker/picker'
+import { Image } from "react-native";
 import React, { useState, useEffect } from "react";
 
 const Register = () => {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <Text style={styles.logo}>LOGO</Text>
-        <Text style={styles.slogan}>New slogan</Text>
+      <Image source={require('../assets/logo.jpg')} style={styles.logoImage} />
+        <Text style={styles.slogan}>KARAOKE</Text>
       </View>
-
+      <Picker
+        style={styles.input}
+        onValueChange={(itemValue) => handleRoleChange(itemValue)}
+      >
+        <Picker.Item label="Chọn vai trò" value="" />
+        <Picker.Item label="Quản trị viên" value="admin" />
+        <Picker.Item label="Cộng tác viên" value="ctv" />
+      </Picker>
       <TextInput
         style={styles.input}
         placeholder="Email / Username"
         keyboardType="email-address"
       />
       <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-      <TextInput placeholder="Role" />
+      
+      
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Log In / Sign Up</Text>
+        <Text style={styles.buttonText}>Đăng kí</Text>
       </TouchableOpacity>
     </View>
   );
@@ -42,6 +52,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     position: "relative", // Sử dụng position: "relative" để phần tử con có thể sử dụng position: "absolute" để định v
   },
+  logoImage: {
+    width: 450, // Thay đổi kích thước theo ý của bạn
+    height: 240, // Thay đổi kích thước theo ý của bạn
+  },
   logoContainer: {
     width: "100%", // Chiếm toàn bộ chiều rộng của màn hình
     backgroundColor: "black",
@@ -56,8 +70,8 @@ const styles = StyleSheet.create({
     color: "white",
   },
   slogan: {
-    fontSize: 16,
-    color: "grey",
+    fontSize: 30,
+    color: "white",
   },
   input: {
     width: "80%",

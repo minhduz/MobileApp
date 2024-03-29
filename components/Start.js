@@ -27,7 +27,7 @@ const Start = () => {
         onPress={() => navigation.navigate("Carousel")}
         style={styles.buttonContainer}
       >
-        <Text style={styles.createButton}>Hát</Text>
+        <Text style={styles.createButton}>Trải nghiệm ngay</Text>
       </TouchableOpacity>
     </View>
   );

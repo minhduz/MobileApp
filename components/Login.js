@@ -9,12 +9,13 @@ import {
   Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-
+import {Picker} from '@react-native-picker/picker'
+import { Image } from "react-native";
 const Login = () => {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <Text style={styles.logo}>LOGO</Text>
+      <Image source={require('../assets/logo.jpg')} style={styles.logoImage} />
         <Text style={styles.slogan}>New slogan</Text>
       </View>
 
@@ -24,7 +25,15 @@ const Login = () => {
         keyboardType="email-address"
       />
       <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-      <TextInput placeholder="Role" />
+      <Picker
+        style={styles.input}
+        onValueChange={(itemValue) => handleRoleChange(itemValue)}
+      >
+        <Picker.Item label="Select Role" value="" />
+        <Picker.Item label="Admin" value="admin" />
+        <Picker.Item label="Contributor" value="ctv" />
+      </Picker>
+      
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Log In / Sign Up</Text>
       </TouchableOpacity>
@@ -49,6 +58,10 @@ const styles = StyleSheet.create({
     position: "absolute", // Định vị phần tử
     top: 0,
     paddingBottom: 200, // Chạm vào phía trên cùng của màn hình
+  },
+  logoImage: {
+    width: 450, // Thay đổi kích thước theo ý của bạn
+    height: 240, // Thay đổi kích thước theo ý của bạn
   },
   logo: {
     fontSize: 28,

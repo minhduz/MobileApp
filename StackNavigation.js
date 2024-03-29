@@ -7,6 +7,7 @@ import Carousel from "./components/Carousel";
 import Start from "./components/Start";
 import Register from "./components/Register";
 
+
 const StackNavigation = () => {
   const Stack = createNativeStackNavigator();
   return (

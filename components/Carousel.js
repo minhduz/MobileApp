@@ -112,11 +112,11 @@ const Carousel = () => {
           onPress={() => navigation.navigate("Register")}
           style={styles.buttonContainer}
         >
-          <Text style={styles.createButton}>Create Account</Text>
+          <Text style={styles.createButton}>Đăng kí tài khoản</Text>
         </TouchableOpacity>
 
         <Pressable onPress={() => navigation.navigate("Login")}>
-          <Text style={styles.alreadyText}>Already have an account</Text>
+          <Text style={styles.alreadyText}>Đăng nhập</Text>
         </Pressable>
       </View>
     </View>
