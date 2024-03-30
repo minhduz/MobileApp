@@ -7,6 +7,7 @@ import Carousel from "./components/Carousel";
 import Start from "./components/Start";
 import Register from "./components/Register";
 import AdminForm from "./components/AdminForm";
+import UserForm from "./components/UserForm";
 
 const StackNavigation = () => {
   const Stack = createNativeStackNavigator();
@@ -36,6 +37,11 @@ const StackNavigation = () => {
         <Stack.Screen
           name="AdminForm"
           component={AdminForm}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="UserForm"
+          component={UserForm}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

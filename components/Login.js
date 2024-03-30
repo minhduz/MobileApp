@@ -43,7 +43,14 @@ const Login = () => {
         onPress={() => navigation.navigate("AdminForm")}
         style={styles.button}
       >
-        <Text style={styles.buttonText}>Log In / Sign Up</Text>
+        <Text style={styles.buttonText}>Log In Admin / Sign Up</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate("UserForm")}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>Log In User / Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
