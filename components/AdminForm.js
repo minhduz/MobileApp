@@ -39,7 +39,9 @@ const app = initializeApp(firebaseConfig);
 // Initialize Realtime Database and get a reference to the service
 const database = getDatabase(app);
 
-export default function UserForm() {
+export default function UserForm({ route }) {
+  const { inputText } = route.params;
+  const user_name = inputText;
   const handlePress = () => {
     console.log("Button pressed");
     // Xử lý các hành động khi nút được nhấn ở đây
@@ -116,7 +118,7 @@ export default function UserForm() {
             ></ImageBackground>
             <View style={styles.flex_column}>
               <Text style={[styles.br_20]}></Text>
-              <Text style={{ fontSize: 20 }}>User</Text>
+              <Text style={{ fontSize: 20 }}>{user_name}</Text>
               <View style={styles.flex_row}>
                 <Text>Tổng tiền </Text>
                 <Text>Level 1</Text>

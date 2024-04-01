@@ -20,9 +20,11 @@ import {
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, child, get } from "firebase/database";
 
-export default function UserForm() {
+export default function UserForm({ route }) {
   // TẠO 1 HÀM GET USER_NAME TỪ ĐĂNG NHẬP, RÚT TIỀN ĐỂ GỬI CHO MONACO VỚI SWIPEABLE LÀ XONG
-  const user_name = "hologramryou";
+
+  const { inputText } = route.params;
+  const user_name = inputText;
   // xử lí button
 
   const handlePress = () => {

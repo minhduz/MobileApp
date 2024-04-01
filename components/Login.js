@@ -19,11 +19,16 @@ const Login = () => {
   const navigation = useNavigation();
   const data = [
     { label: "Admin", value: "1" },
-    { label: "Contributor", value: "2" },
+    { label: "User", value: "2" },
   ];
 
   const [value, setValue] = useState(null);
+  const [labelling, labellingset] = useState("Admin");
   const [isFocus, setIsFocus] = useState(false);
+
+  const [username, setUsername] = useState("");
+
+  //() => labellingset("Admin");
 
   return (
     <View style={styles.container}>
@@ -37,8 +42,9 @@ const Login = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Email / Username"
-        keyboardType="email-address"
+        placeholder="Username"
+        onChangeText={setUsername}
+        value={username}
       />
       <TextInput style={styles.input} placeholder="Password" secureTextEntry />
       <Dropdown
@@ -51,12 +57,13 @@ const Login = () => {
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? "Select role" : "..."}
+        placeholder={!isFocus ? "Admin" : "..."}
         value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
           setValue(item.value);
+          labellingset(item.label);
           setIsFocus(false);
         }}
         renderLeftIcon={() => (
@@ -70,17 +77,12 @@ const Login = () => {
       />
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("AdminForm")}
+        onPress={() =>
+          navigation.navigate(labelling + "Form", { inputText: username })
+        }
         style={styles.button}
       >
-        <Text style={styles.buttonText}>Log In Admin / Sign Up</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate("UserForm")}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Log In User / Sign Up</Text>
+        <Text style={styles.buttonText}>Log In</Text>
       </TouchableOpacity>
     </View>
   );
