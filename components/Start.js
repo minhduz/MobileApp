@@ -18,8 +18,8 @@ const Start = () => {
       <Image
         style={{
           width: windowWidth,
-          height: 200,
-          top: 200,
+          height: 300,
+          top: 150,
         }}
         source={require("../assets/logo.jpg")}
       />

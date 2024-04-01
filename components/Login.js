@@ -12,8 +12,19 @@ import React, { useState, useEffect } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+
+import { Dropdown } from "react-native-element-dropdown";
+import AntDesign from "@expo/vector-icons/AntDesign";
 const Login = () => {
   const navigation = useNavigation();
+  const data = [
+    { label: "Admin", value: "1" },
+    { label: "Contributor", value: "2" },
+  ];
+
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
@@ -30,14 +41,33 @@ const Login = () => {
         keyboardType="email-address"
       />
       <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-      <Picker
-        style={styles.input}
-        onValueChange={(itemValue) => handleRoleChange(itemValue)}
-      >
-        <Picker.Item label="Select Role" value="" />
-        <Picker.Item label="Admin" value="admin" />
-        <Picker.Item label="Contributor" value="ctv" />
-      </Picker>
+      <Dropdown
+        style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        data={data}
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder={!isFocus ? "Select role" : "..."}
+        value={value}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
+        onChange={(item) => {
+          setValue(item.value);
+          setIsFocus(false);
+        }}
+        renderLeftIcon={() => (
+          <AntDesign
+            style={styles.icon}
+            color={isFocus ? "blue" : "black"}
+            name="Safety"
+            size={20}
+          />
+        )}
+      />
 
       <TouchableOpacity
         onPress={() => navigation.navigate("AdminForm")}
@@ -106,6 +136,32 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
+    fontSize: 16,
+  },
+  dropdown: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 0.5,
+    borderRadius: 25,
+    paddingHorizontal: 10,
+    width: "80%",
+    backgroundColor: "#E7E7E7",
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
     fontSize: 16,
   },
 });

@@ -7,12 +7,17 @@ import {
   Button,
   TouchableOpacity,
   TextInput,
+  Modal,
+  StatusBar,
 } from "react-native";
 import styles from "./css/FormAdminStyle";
 import {
   GestureHandlerRootView,
   ScrollView as GestureHandlerScrollView,
 } from "react-native-gesture-handler";
+
+import { Dropdown } from "react-native-element-dropdown";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, child, get } from "firebase/database";
@@ -42,6 +47,20 @@ export default function UserForm() {
 
   const [listBooking, setListBooking] = useState([]);
   const [listPayment, setListPayment] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+
+  const data = [
+    { label: "Item 1", value: "1" },
+    { label: "Item 2", value: "2" },
+    { label: "Item 3", value: "3" },
+    { label: "Item 4", value: "4" },
+    { label: "Item 5", value: "5" },
+    { label: "Item 6", value: "6" },
+    { label: "Item 7", value: "7" },
+    { label: "Item 8", value: "8" },
+  ];
 
   useEffect(() => {
     handleRead();
@@ -64,6 +83,7 @@ export default function UserForm() {
 
   return (
     <>
+      <StatusBar backgroundColor="black" />
       <GestureHandlerRootView
         style={[styles.white, styles.width_100, styles.height_100]}
       >
@@ -73,10 +93,8 @@ export default function UserForm() {
         >
           {/* header */}
           <View style={[styles.flex, styles.black]}>
-            <Text style={[styles.br_60]}></Text>
-            <Text style={[styles.br_10]}></Text>
             <ImageBackground
-              source={require("../assets/images/DSC00200.jpg")}
+              source={require("../assets/logo.jpg")}
               style={styles.logo}
             ></ImageBackground>
             <Text style={[styles.br_20]}></Text>
@@ -124,7 +142,10 @@ export default function UserForm() {
                   <Text style={styles.title}>
                     {listBooking[bookingKey].Hub}
                   </Text>
-                  <TouchableOpacity style={styles.moreButton}>
+                  <TouchableOpacity
+                    onPress={() => setIsModalVisible(true)}
+                    style={styles.moreButton}
+                  >
                     <Text style={styles.moreButtonText}>More</Text>
                     {/* Icon cho nút More có thể thêm vào đây */}
                   </TouchableOpacity>
@@ -167,6 +188,112 @@ export default function UserForm() {
               ]}
             ></ImageBackground>
           </View>
+
+          <Modal
+            visible={isModalVisible}
+            animationType="slide"
+            presentationStyle="pageSheet"
+          >
+            <View style={styles.modalContainer}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setIsModalVisible(false)}
+              >
+                <Text style={styles.closeButtonText}>X</Text>
+              </TouchableOpacity>
+              <Text style={{ fontSize: 16 }}>Review and Confirm</Text>
+
+              {/* Add your modal content here */}
+              <ImageBackground
+                source={require("../assets/logo.jpg")}
+                style={styles.avatar}
+              />
+              <Text style={styles.userNameModal}>User CTV</Text>
+              <Text style={styles.userEmailModal}>admin@gmail.com</Text>
+
+              <View style={styles.dropdownContainer}>
+                <Text style={{ padding: 10, fontSize: 16, marginLeft: 10 }}>
+                  Đơn tại:
+                </Text>
+                {/* Drop box ở đây */}
+                <View style={[styles.containerDropDown, styles.flex_row]}>
+                  <Dropdown
+                    style={[
+                      styles.dropdown,
+                      isFocus && { borderColor: "blue" },
+                    ]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={data}
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={!isFocus ? "Select item" : "..."}
+                    searchPlaceholder="Search..."
+                    value={value}
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
+                    onChange={(item) => {
+                      setValue(item.value);
+                      setIsFocus(false);
+                    }}
+                    renderLeftIcon={() => (
+                      <AntDesign
+                        style={styles.icon}
+                        color={isFocus ? "blue" : "black"}
+                        name="Safety"
+                        size={20}
+                      />
+                    )}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.dropdownContainer}>
+                <Text style={{ padding: 10, fontSize: 16, marginLeft: 26 }}>
+                  Chi tiết:
+                </Text>
+                {/* Drop box ở đây */}
+                <View style={[styles.containerDropDown, styles.flex_row]}>
+                  <TextInput
+                    style={styles.detailInput}
+                    placeholder="nhập nội dung chi tiết"
+                  ></TextInput>
+                </View>
+              </View>
+
+              <View style={{ marginVertical: "5%" }}>
+                <Text style={{ fontSize: 25, fontWeight: "bold" }}>
+                  Tổng số tiền
+                </Text>
+              </View>
+              <View
+                style={{
+                  backgroundColor: "#E7E7E7",
+                  paddingHorizontal: 120,
+                  paddingVertical: 30,
+                }}
+              >
+                <Text style={{ fontSize: 30 }}>$10</Text>
+              </View>
+
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[styles.buttonModal, { backgroundColor: "#009470" }]}
+                >
+                  <Text style={styles.modalButtonText}>Chấp nhận</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.buttonModal, { backgroundColor: "red" }]}
+                >
+                  <Text style={styles.modalButtonText}>Hủy</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </GestureHandlerScrollView>
       </GestureHandlerRootView>
     </>

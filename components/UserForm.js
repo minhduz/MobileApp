@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
 import {
+  ActivityIndicator,
   View,
   Text,
   ImageBackground,
@@ -7,18 +9,190 @@ import {
   Button,
   TouchableOpacity,
   TextInput,
+  Alert,
+  StyleSheet,
 } from "react-native";
 import styles from "./css/FormUserStyle";
 import {
   GestureHandlerRootView,
   ScrollView as GestureHandlerScrollView,
 } from "react-native-gesture-handler";
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set, child, get } from "firebase/database";
 
 export default function UserForm() {
+  // TẠO 1 HÀM GET USER_NAME TỪ ĐĂNG NHẬP, RÚT TIỀN ĐỂ GỬI CHO MONACO VỚI SWIPEABLE LÀ XONG
+  const user_name = "hologramryou";
+  // xử lí button
+
   const handlePress = () => {
     console.log("Button pressed");
     // Xử lý các hành động khi nút được nhấn ở đây
   };
+  const firebaseConfig = {
+    apiKey: "AIzaSyCicrLXIoWCQd3XvIFoNaUrYpuCRydsgaQ",
+    authDomain: "bookingshit-3c16d.firebaseapp.com",
+    databaseURL: "https://bookingshit-3c16d-default-rtdb.firebaseio.com",
+    projectId: "bookingshit-3c16d",
+    storageBucket: "bookingshit-3c16d.appspot.com",
+    messagingSenderId: "948204112931",
+    appId: "1:948204112931:web:c44088284d7536bd9af596",
+    measurementId: "G-WKYFMTPZJ6",
+  };
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  // Initialize Realtime Database and get a reference to the service
+  const database = getDatabase(app);
+  // Đặt hàng
+  const [text1, co_so] = useState("");
+  const [text2, ten_khach_hang] = useState("");
+  const [text3, so_dien_thoai] = useState("");
+  const [text4, thoi_gian_1] = useState("");
+  const [text5, thoi_gian_2] = useState("");
+
+  function create(path, name, value) {
+    set(ref(database, path + name), value);
+  }
+
+  function read(path, value) {
+    const dbRef = ref(getDatabase());
+    return get(child(dbRef, path))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          value.val = snapshot.val();
+          return value.val; // Returning the value for further handling
+        } else {
+          console.log("No data available");
+          return null; // Returning null if no data is available
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        return null; // Returning null in case of an error
+      });
+  }
+
+  const dat_hang = async () => {
+    var values = { val: null };
+    await read("Booking/Value", values);
+    console.log(values.val); // Will contain the value after reading from the database
+    // Do something with the input values
+    var value = values.val;
+    if (value > 1000) {
+      value = 0;
+    }
+    value += 1;
+    if (text1 && text2 && text3 && text4 && text5) {
+      Alert.alert(
+        "Đơn hàng đã được gửi lên hệ thống \n Xin hãy chờ để được xác nhận"
+      );
+      create(
+        "/Booking/" + value.toString() + "/",
+        "Account",
+        user_name.toString()
+      );
+      create("/Booking/" + value.toString() + "/", "Hub", text1);
+      create("/Booking/" + value.toString() + "/", "Name", text2);
+      create("/Booking/" + value.toString() + "/", "Phone", text3);
+      create("/Booking/" + value.toString() + "/", "Time", text5 + text4);
+      create("/Booking/" + value.toString() + "/", "Amount", 0);
+      create("/Booking/", "Value", value);
+      create(
+        "/User_management/" +
+          user_name.toString() +
+          "/Account/Booking/" +
+          value.toString() +
+          "/",
+        "Account",
+        user_name.toString()
+      );
+      create(
+        "/User_management/" +
+          user_name.toString() +
+          "/Account/Booking/" +
+          value.toString() +
+          "/",
+        "Hub",
+        text1
+      );
+      create(
+        "/User_management/" +
+          user_name.toString() +
+          "/Account/Booking/" +
+          value.toString() +
+          "/",
+        "Name",
+        text2
+      );
+      create(
+        "/User_management/" +
+          user_name.toString() +
+          "/Account/Booking/" +
+          value.toString() +
+          "/",
+        "Phone",
+        text3
+      );
+      create(
+        "/User_management/" +
+          user_name.toString() +
+          "/Account/Booking/" +
+          value.toString() +
+          "/",
+        "Time",
+        text5 + text4
+      );
+      create(
+        "/User_management/" +
+          user_name.toString() +
+          "/Account/Booking/" +
+          value.toString() +
+          "/",
+        "Amount",
+        "0"
+      );
+    } else {
+      // Xử lý khi một hoặc nhiều biến text không tồn tại
+      Alert.alert("Vui lòng điền đầy đủ thông tin khách hàng");
+    }
+  };
+  // user_management/username/'Account'/'Booking'/Value/co_so, time, value
+  const [don_hang, setDonHang] = useState({ val: null });
+  const [remain, Amount_remain] = useState({ val: null });
+  const [total, set_total] = useState({ val: null });
+  const [dataFetched, setDataFetched] = useState(false);
+  const donHangTichLuy = async () => {
+    try {
+      const donHangData = { val: null };
+      const my_total = { val: null };
+      await read(
+        "User_management/" + user_name.toString() + "/Account/Booking",
+        donHangData
+      );
+      await read(
+        "User_management/" + user_name.toString() + "/Agency",
+        my_total
+      );
+
+      // Cập nhật state với dữ liệu mới
+      setDonHang(donHangData);
+      set_total(my_total);
+      setDataFetched(true);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Gọi hàm khi component được render
+    donHangTichLuy();
+  }, []); // Chỉ gọi một lần sau khi component được render
+  if (!dataFetched) {
+    return <ActivityIndicator />; // Hiển thị indicator khi đang fetch dữ liệu
+  }
+  console.log(don_hang.val);
+  console.log(don_hang.val);
   return (
     <>
       <GestureHandlerRootView
@@ -33,7 +207,7 @@ export default function UserForm() {
             <Text style={[styles.br_60]}></Text>
             <Text style={[styles.br_10]}></Text>
             <ImageBackground
-              source={require("../assets/images/DSC00200.jpg")}
+              source={require("../assets/logo.jpg")}
               style={styles.logo}
             ></ImageBackground>
             <Text style={[styles.br_20]}></Text>
@@ -46,7 +220,6 @@ export default function UserForm() {
           </View>
 
           {/* user */}
-          <Text style={[styles.br_30]}></Text>
 
           <View style={styles.flex_row}>
             <ImageBackground
@@ -55,10 +228,10 @@ export default function UserForm() {
             ></ImageBackground>
             <View style={styles.flex_column}>
               <Text style={[styles.br_20]}></Text>
-              <Text style={{ fontSize: 20 }}>User</Text>
+              <Text style={{ fontSize: 20 }}>{user_name}</Text>
               <View style={styles.flex_row}>
-                <Text>Tổng tiền </Text>
-                <Text>Level 1</Text>
+                <Text>{total.val.Amount_total} </Text>
+                <Text>Level {total.val.Level}</Text>
               </View>
             </View>
           </View>
@@ -69,7 +242,9 @@ export default function UserForm() {
                 style={[styles.button, styles.firstButton]}
                 onPress={handlePress}
               >
-                <Text style={[styles.buttonText]}>Tiền hiện tại: </Text>
+                <Text style={[styles.buttonText]}>
+                  Tiền hiện tại: {total.val.Amount_remain}{" "}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.secondButton]}
@@ -85,56 +260,39 @@ export default function UserForm() {
           <Text style={{ fontSize: 18, fontWeight: "bold", marginLeft: 20 }}>
             Đơn hàng tích lũy
           </Text>
+
           <Text style={[styles.br_20]}></Text>
           <GestureHandlerScrollView
             style={styles.scrollViews}
             showsVerticalScrollIndicator={false}
           >
-            <View style={styles.flex}>
-              <Text style={[styles.br_10]}></Text>
-              <View style={styles.block}>
-                <Text style={styles.top_right}>$31</Text>
-                <Text style={styles.text}>Hospital Shitttt</Text>
-                <Text style={styles.text}>15 Sep 2022</Text>
-              </View>
-              <Text style={[styles.br_10]}></Text>
-            </View>
-            <View style={styles.flex}>
-              <Text style={[styles.br_10]}></Text>
-              <View style={styles.block}>
-                <Text style={styles.top_right}>$31</Text>
-                <Text style={styles.text}>Hospital Shitttt</Text>
-                <Text style={styles.text}>15 Sep 2022</Text>
-              </View>
-              <Text style={[styles.br_10]}></Text>
-            </View>
-            <View style={styles.flex}>
-              <Text style={[styles.br_10]}></Text>
-              <View style={styles.block}>
-                <Text style={styles.top_right}>$31</Text>
-                <Text style={styles.text}>Hospital Shitttt</Text>
-                <Text style={styles.text}>15 Sep 2022</Text>
-              </View>
-              <Text style={[styles.br_10]}></Text>
-            </View>
-            <View style={styles.flex}>
-              <Text style={[styles.br_10]}></Text>
-              <View style={styles.block}>
-                <Text style={styles.top_right}>$31</Text>
-                <Text style={styles.text}>Hospital Shitttt</Text>
-                <Text style={styles.text}>15 Sep 2022</Text>
-              </View>
-              <Text style={[styles.br_10]}></Text>
-            </View>
-            <View style={styles.flex}>
-              <Text style={[styles.br_10]}></Text>
-              <View style={styles.block}>
-                <Text style={styles.top_right}>$31</Text>
-                <Text style={styles.text}>Hospital Shitttt</Text>
-                <Text style={styles.text}>15 Sep 2022</Text>
-              </View>
-              <Text style={[styles.br_10]}></Text>
-            </View>
+            {don_hang.val &&
+              Object.keys(don_hang.val)
+                .sort((a, b) => a - b) // Sắp xếp các khóa theo thứ tự tăng dần
+                .map((key) => (
+                  <View key={key} style={[styles.flex]}>
+                    <Text style={[styles.br_10]}></Text>
+                    <View
+                      style={[
+                        styles.block,
+                        {
+                          width: "100%",
+                          backgroundColor:
+                            don_hang.val[key].Amount === "0"
+                              ? "white"
+                              : "#009476",
+                        },
+                      ]}
+                    >
+                      <Text style={styles.top_right}>
+                        ${don_hang.val[key].Amount}
+                      </Text>
+                      <Text style={styles.text}>{don_hang.val[key].Hub}</Text>
+                      <Text style={styles.text}>{don_hang.val[key].Time}</Text>
+                    </View>
+                    <Text style={[styles.br_10]}></Text>
+                  </View>
+                ))}
           </GestureHandlerScrollView>
 
           <Text style={[styles.br_60]}></Text>
@@ -158,6 +316,8 @@ export default function UserForm() {
             </Text>
             <TextInput
               style={[styles.input]}
+              onChangeText={co_so}
+              value={text1}
               placeholder="Username"
               placeholderTextColor="#888"
             />
@@ -166,6 +326,8 @@ export default function UserForm() {
             </Text>
             <TextInput
               style={styles.input}
+              onChangeText={ten_khach_hang}
+              value={text2}
               placeholder="Username"
               placeholderTextColor="#888"
             />
@@ -174,6 +336,8 @@ export default function UserForm() {
             </Text>
             <TextInput
               style={styles.input}
+              onChangeText={so_dien_thoai}
+              value={text3}
               placeholder="Username"
               placeholderTextColor="#888"
             />
@@ -183,11 +347,15 @@ export default function UserForm() {
             <View style={[styles.flex_row, { flex: 1 }]}>
               <TextInput
                 style={[styles.input_new, { width: "60%" }]}
+                onChangeText={thoi_gian_1}
+                value={text4}
                 placeholder="Username"
                 placeholderTextColor="#888"
               />
               <TextInput
                 style={[styles.input_new, { width: "20%" }]}
+                onChangeText={thoi_gian_2}
+                value={text5}
                 placeholder="Username"
                 placeholderTextColor="#888"
               />
@@ -195,16 +363,10 @@ export default function UserForm() {
             <View style={styles.container_inside}>
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                  style={[styles.button, styles.secondButton]}
-                  onPress={handlePress}
+                  style={[styles.button, styles.secondButton, { width: "50%" }]}
+                  onPress={dat_hang}
                 >
-                  <Text style={[styles.buttonText]}>NO</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.button, styles.secondButton]}
-                  onPress={handlePress}
-                >
-                  <Text style={[styles.buttonText]}>YES</Text>
+                  <Text style={[styles.buttonText]}>submit</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -223,6 +385,7 @@ export default function UserForm() {
               ]}
             ></ImageBackground>
           </View>
+          <Text style={[styles.br_30]}></Text>
         </GestureHandlerScrollView>
       </GestureHandlerRootView>
     </>

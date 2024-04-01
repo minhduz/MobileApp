@@ -131,6 +131,97 @@ const styles = StyleSheet.create({
     padding: "2%",
     borderRadius: 15,
   },
+  modalContainer: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    marginTop: "auto", // Di chuyển modal xuống dưới cùng của màn hình
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+    height: "67%", // Chiếm khoảng 2/3 màn hình từ dưới lên
+  },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    padding: 5,
+  },
+  closeButtonText: {
+    fontSize: 25,
+  },
+  avatar: {
+    height: 70,
+    width: 70,
+    marginTop: 20,
+  },
+  userNameModal: {
+    fontSize: 25,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  userEmailModal: {
+    fontSize: 15,
+  },
+  dropdown: {
+    left: 40,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 0.5,
+    borderRadius: 25,
+    paddingHorizontal: 10,
+    width: "80%",
+    backgroundColor: "#E7E7E7",
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  dropdownContainer: {
+    flexDirection: "row",
+    marginTop: "8%",
+  },
+  containerDropDown: {
+    backgroundColor: "white",
+    flexDirection: "row",
+  },
+  detailInput: {
+    left: 10,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 0.5,
+    width: "88%",
+    backgroundColor: "#E7E7E7",
+  },
+  placeholderInput: {
+    justifyContent: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    width: "90%",
+    justifyContent: "space-between",
+    marginTop: "5%",
+  },
+  buttonModal: {
+    paddingVertical: 15, // Độ cao của nút chấp nhận
+    paddingHorizontal: 40, // Độ rộng của nút chấp nhận
+    borderRadius: 5, // Độ cong góc của nút chấp nhận
+  },
+  modalButtonText: { fontSize: 18, color: "white", fontWeight: "bold" },
 });
 
 export default styles;
