@@ -42,16 +42,14 @@ const database = getDatabase(app);
 export default function UserForm({ route }) {
   const { inputText } = route.params;
   const user_name = inputText;
-  const handlePress = () => {
-    console.log("Button pressed");
-    // Xử lý các hành động khi nút được nhấn ở đây
-  };
 
   const [listBooking, setListBooking] = useState([]);
   const [listPayment, setListPayment] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedBookingId, setSelectedBookingId] = useState(null);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [orderAmount, setOrderAmount] = useState(null);
 
   const data = [
     { label: "Item 1", value: "1" },
@@ -75,11 +73,37 @@ export default function UserForm({ route }) {
       if (snapshotBooking.exists() && snapshotPayment.exists()) {
         setListBooking(snapshotBooking.val());
         setListPayment(snapshotPayment.val());
+        console.log(snapshotBooking.val());
       } else {
         console.log("No data available");
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleMorePress = (bookingId) => {
+    setSelectedBookingId(bookingId);
+    setIsModalVisible(true);
+  };
+
+  const create = (path, name, value) => {
+    set(ref(database, path + name), value);
+  };
+
+  const handlePress = async () => {
+    // Xử lý các hành động khi nút được nhấn ở đây
+    if (orderAmount !== null) {
+      // Only proceed if orderAmount is not null
+      create(
+        "/Booking/" + selectedBookingId.toString() + "/",
+        "Amount",
+        orderAmount
+      );
+      setIsModalVisible(false); // Close the modal after accepting
+    } else {
+      // Handle case where orderAmount is null (not yet filled)
+      console.log("Please enter order amount");
     }
   };
 
@@ -145,7 +169,7 @@ export default function UserForm({ route }) {
                     {listBooking[bookingKey].Hub}
                   </Text>
                   <TouchableOpacity
-                    onPress={() => setIsModalVisible(true)}
+                    onPress={() => handleMorePress(bookingKey)}
                     style={styles.moreButton}
                   >
                     <Text style={styles.moreButtonText}>More</Text>
@@ -210,8 +234,12 @@ export default function UserForm({ route }) {
                 source={require("../assets/logo.jpg")}
                 style={styles.avatar}
               />
-              <Text style={styles.userNameModal}>User CTV</Text>
-              <Text style={styles.userEmailModal}>admin@gmail.com</Text>
+              <Text style={styles.userNameModal}>
+                {selectedBookingId && listBooking[selectedBookingId].Name}
+              </Text>
+              <Text style={styles.userEmailModal}>
+                {selectedBookingId && listBooking[selectedBookingId].Phone}
+              </Text>
 
               <View style={styles.dropdownContainer}>
                 <Text style={{ padding: 10, fontSize: 16, marginLeft: 10 }}>
@@ -261,6 +289,9 @@ export default function UserForm({ route }) {
                 {/* Drop box ở đây */}
                 <View style={[styles.containerDropDown, styles.flex_row]}>
                   <TextInput
+                    onChange={(text) => {
+                      setOrder(text);
+                    }}
                     style={styles.detailInput}
                     placeholder="nhập nội dung chi tiết"
                   ></TextInput>
@@ -279,11 +310,16 @@ export default function UserForm({ route }) {
                   paddingVertical: 30,
                 }}
               >
-                <Text style={{ fontSize: 30 }}>$10</Text>
+                <TextInput
+                  style={{ fontSize: 30 }}
+                  onChangeText={(text) => setOrderAmount(text)} // Update orderAmount when text changes
+                  value={orderAmount} // Set the value of TextInput to orderAmount
+                ></TextInput>
               </View>
 
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
+                  onPress={handlePress} // Call handlePress when button is pressed
                   style={[styles.buttonModal, { backgroundColor: "#009470" }]}
                 >
                   <Text style={styles.modalButtonText}>Chấp nhận</Text>
