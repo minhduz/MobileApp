@@ -75,10 +75,6 @@ const styles = StyleSheet.create({
   scrollViews: {
     width: "90%",
     height: 400,
-    borderWidth: 2, // Độ dày của border
-    borderColor: "black", // Màu của border
-    borderRadius: 10, // Độ cong của border
-    paddingHorizontal: 50, // Khoảng cách giữa border và văn bản
     marginLeft: "5%",
   },
   top_right: {
@@ -116,6 +112,29 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderColor: "black", // Màu của border
     borderWidth: 1, // Độ dày của border
+  },
+  dotIndicator: {
+    flexDirection: "row",
+    justifyContent: "center",
+    padding: 10,
+  },
+  dot: {
+    backgroundColor: "#D9D9D9",
+    height: 10,
+    width: 10,
+    borderRadius: 5,
+    marginHorizontal: 5,
+  },
+  dotActive: {
+    backgroundColor: "#CE2B2B",
+    width: 25,
+  },
+  orderContainer: {
+    borderColor: "black",
+    borderWidth: 2,
+    marginHorizontal: "5%",
+    padding: "2%",
+    borderRadius: 15,
   },
 });
 

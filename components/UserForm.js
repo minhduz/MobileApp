@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import {
   ActivityIndicator,
@@ -11,6 +11,9 @@ import {
   TextInput,
   Alert,
   StyleSheet,
+  FlatList,
+  Dimensions,
+  Image,
 } from "react-native";
 import styles from "./css/FormUserStyle";
 import {
@@ -22,6 +25,10 @@ import { getDatabase, ref, set, child, get } from "firebase/database";
 
 export default function UserForm({ route }) {
   // TẠO 1 HÀM GET USER_NAME TỪ ĐĂNG NHẬP, RÚT TIỀN ĐỂ GỬI CHO MONACO VỚI SWIPEABLE LÀ XONG
+  const windowWidth = Dimensions.get("window").width;
+  const windowHeight = Dimensions.get("window").height;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const flatlistRef = useRef();
 
   const { inputText } = route.params;
   const user_name = inputText;
@@ -195,6 +202,65 @@ export default function UserForm({ route }) {
   }
   console.log(don_hang.val);
   console.log(don_hang.val);
+
+  const carouselData = [
+    {
+      id: "01",
+      image: require("../assets/images/DSC00200.jpg"),
+    },
+    {
+      id: "02",
+      image: require("../assets/images/DSC00593.jpg"),
+    },
+    {
+      id: "03",
+      image: require("../assets/images/DSC00791.jpg"),
+    },
+  ];
+
+  const getItemLayout = (data, index) => ({
+    length: windowWidth,
+    offset: windowWidth * index,
+    index: index,
+  });
+
+  const handleScroll = (event) => {
+    const scrollPosition = event.nativeEvent.contentOffset.x;
+
+    const index = scrollPosition / windowWidth;
+
+    setActiveIndex(index);
+  };
+
+  const renderItem = ({ item, index }) => {
+    return (
+      <View style={{ paddingHorizontal: 30 }}>
+        {/* Thêm margin horizontal */}
+        <View style={{ width: windowWidth - 60 }}>
+          {/* Trừ đi tổng margin */}
+          <Image
+            source={item.image}
+            style={{
+              height: 200,
+              width: windowWidth - 60,
+              borderRadius: 10, // Trừ đi tổng margin
+            }}
+          />
+        </View>
+      </View>
+    );
+  };
+
+  const renderDotIndicator = () => {
+    return carouselData.map((dot, index) => {
+      if (activeIndex.toFixed() == index) {
+        return <View key={index} style={[styles.dot, styles.dotActive]}></View>;
+      } else {
+        return <View key={index} style={styles.dot}></View>;
+      }
+    });
+  };
+
   return (
     <>
       <GestureHandlerRootView
@@ -264,46 +330,58 @@ export default function UserForm({ route }) {
           </Text>
 
           <Text style={[styles.br_20]}></Text>
-          <GestureHandlerScrollView
-            style={styles.scrollViews}
-            showsVerticalScrollIndicator={false}
-          >
-            {don_hang.val &&
-              Object.keys(don_hang.val)
-                .sort((a, b) => a - b) // Sắp xếp các khóa theo thứ tự tăng dần
-                .map((key) => (
-                  <View key={key} style={[styles.flex]}>
-                    <Text style={[styles.br_10]}></Text>
-                    <View
-                      style={[
-                        styles.block,
-                        {
-                          width: "100%",
-                          backgroundColor:
-                            don_hang.val[key].Amount === "0"
-                              ? "white"
-                              : "#009476",
-                        },
-                      ]}
-                    >
-                      <Text style={styles.top_right}>
-                        ${don_hang.val[key].Amount}
-                      </Text>
-                      <Text style={styles.text}>{don_hang.val[key].Hub}</Text>
-                      <Text style={styles.text}>{don_hang.val[key].Time}</Text>
+          <View style={styles.orderContainer}>
+            <GestureHandlerScrollView
+              style={styles.scrollViews}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.scrollViewContent}
+            >
+              {don_hang.val &&
+                Object.keys(don_hang.val)
+                  .sort((a, b) => a - b) // Sắp xếp các khóa theo thứ tự tăng dần
+                  .map((key) => (
+                    <View key={key} style={[styles.flex]}>
+                      <Text style={[styles.br_10]}></Text>
+                      <View
+                        style={[
+                          styles.block,
+                          {
+                            width: "100%",
+                            backgroundColor:
+                              don_hang.val[key].Amount === "0"
+                                ? "white"
+                                : "#009476",
+                          },
+                        ]}
+                      >
+                        <Text style={styles.top_right}>
+                          ${don_hang.val[key].Amount}
+                        </Text>
+                        <Text style={styles.text}>{don_hang.val[key].Hub}</Text>
+                        <Text style={styles.text}>
+                          {don_hang.val[key].Time}
+                        </Text>
+                      </View>
+                      <Text style={[styles.br_10]}></Text>
                     </View>
-                    <Text style={[styles.br_10]}></Text>
-                  </View>
-                ))}
-          </GestureHandlerScrollView>
+                  ))}
+            </GestureHandlerScrollView>
+          </View>
 
           <Text style={[styles.br_60]}></Text>
           {/* swipeable */}
-          <Text>Swipeable</Text>
-          <Text>Swipeable</Text>
-          <Text>Swipeable</Text>
-          <Text>Swipeable</Text>
-          <Text>Swipeable</Text>
+          <FlatList
+            data={carouselData}
+            ref={flatlistRef}
+            getItemLayout={getItemLayout}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            horizontal={true}
+            pagingEnabled={true}
+            onScroll={handleScroll}
+          />
+          <Text style={[styles.br_20]}></Text>
+          <View style={styles.dotIndicator}>{renderDotIndicator()}</View>
 
           <Text style={[styles.br_40]}></Text>
           {/* Đặt hàng */}
