@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   ActivityIndicator,
@@ -29,6 +30,8 @@ export default function UserForm({ route }) {
   const windowHeight = Dimensions.get("window").height;
   const [activeIndex, setActiveIndex] = useState(0);
   const flatlistRef = useRef();
+  
+  const navigation = useNavigation();
 
   const { inputText } = route.params;
   const user_name = inputText;
@@ -233,19 +236,39 @@ export default function UserForm({ route }) {
   };
 
   const renderItem = ({ item, index }) => {
+    const handleImagePress = () => {
+      // Navigate to the respective page based on the index or id of the item
+      // Example: If index is 0, navigate to a page with information for the first image
+      // You can replace this with your logic
+      switch (index) {
+        case 0:
+          navigation.navigate("InfoPage1");
+          break;
+        case 1:
+          navigation.navigate("InfoPage2");
+          break;
+        case 2:
+          navigation.navigate("InfoPage3");
+          break;
+        default:
+          break;
+      }};
+      
     return (
       <View style={{ paddingHorizontal: 30 }}>
         {/* Thêm margin horizontal */}
         <View style={{ width: windowWidth - 60 }}>
           {/* Trừ đi tổng margin */}
-          <Image
-            source={item.image}
-            style={{
-              height: 200,
-              width: windowWidth - 60,
-              borderRadius: 10, // Trừ đi tổng margin
-            }}
-          />
+          <TouchableOpacity onPress={handleImagePress}>
+        <Image
+          source={item.image}
+          style={{
+            height: 200,
+            width: windowWidth - 60,
+            borderRadius: 10, // Trừ đi tổng margin
+          }}
+        />
+      </TouchableOpacity>
         </View>
       </View>
     );
@@ -260,6 +283,7 @@ export default function UserForm({ route }) {
       }
     });
   };
+  
 
   return (
     <>

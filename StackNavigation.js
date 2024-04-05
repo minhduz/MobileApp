@@ -8,7 +8,9 @@ import Start from "./components/Start";
 import Register from "./components/Register";
 import AdminForm from "./components/AdminForm";
 import UserForm from "./components/UserForm";
-
+import InfoPage1 from "./components/InfoPage1";
+import InfoPage2 from "./components/InfoPage2";
+import InfoPage3 from "./components/InfoPage3";
 const StackNavigation = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -42,6 +44,21 @@ const StackNavigation = () => {
         <Stack.Screen
           name="UserForm"
           component={UserForm}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="InfoPage1"
+          component={InfoPage1}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="InfoPage2"
+          component={InfoPage2}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="InfoPage3"
+          component={InfoPage3}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

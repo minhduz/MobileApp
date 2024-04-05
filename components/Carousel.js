@@ -69,8 +69,27 @@ const Carousel = () => {
   };
 
   const renderItem = ({ item, index }) => {
+    const handleImagePress = () => {
+      // Navigate to the respective page based on the index or id of the item
+      // Example: If index is 0, navigate to a page with information for the first image
+      // You can replace this with your logic
+      switch (index) {
+        case 0:
+          navigation.navigate("InfoPage1");
+          break;
+        case 1:
+          navigation.navigate("InfoPage2");
+          break;
+        case 2:
+          navigation.navigate("InfoPage3");
+          break;
+        default:
+          break;
+      }
+    };
+  
     return (
-      <View>
+      <TouchableOpacity onPress={handleImagePress}>
         <Image
           source={item.image}
           style={{
@@ -78,7 +97,7 @@ const Carousel = () => {
             width: windowWidth,
           }}
         />
-      </View>
+      </TouchableOpacity>
     );
   };
 
