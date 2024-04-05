@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
   scrollViews: {
     width: "90%",
     height: 500,
-
     marginLeft: "5%",
   },
   top_right: {
@@ -206,6 +205,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     width: "88%",
     backgroundColor: "#E7E7E7",
+    borderRadius: 5,
   },
   placeholderInput: {
     justifyContent: "center",
@@ -222,6 +222,10 @@ const styles = StyleSheet.create({
     borderRadius: 5, // Độ cong góc của nút chấp nhận
   },
   modalButtonText: { fontSize: 18, color: "white", fontWeight: "bold" },
+  formContainer: {
+    flexDirection: "row",
+    marginTop: "3%",
+  },
 });
 
 export default styles;

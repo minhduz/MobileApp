@@ -9,6 +9,8 @@ import {
   TextInput,
   Modal,
   StatusBar,
+  Pressable,
+  Platform,
 } from "react-native";
 import styles from "./css/FormAdminStyle";
 import {
@@ -45,11 +47,17 @@ export default function UserForm({ route }) {
 
   const [listBooking, setListBooking] = useState([]);
   const [listPayment, setListPayment] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedBookingId, setSelectedBookingId] = useState(null);
+  const [isModalUpVisible, setIsModalUpVisible] = useState(false);
+  const [isModalDownVisible, setIsModalDownVisible] = useState(false);
+  const [selectedBookingId, setSelectedBookingId] = useState(false);
+  const [selectedPaymentId, setSelectedPaymentId] = useState(false);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [orderAmount, setOrderAmount] = useState(null);
+
+  const [date, setDate] = useState(new Date());
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
 
   const data = [
     { label: "Item 1", value: "1" },
@@ -82,9 +90,14 @@ export default function UserForm({ route }) {
     }
   };
 
-  const handleMorePress = (bookingId) => {
+  const handleMoreUpPress = (bookingId) => {
     setSelectedBookingId(bookingId);
-    setIsModalVisible(true);
+    setIsModalUpVisible(true);
+  };
+
+  const handleMoreDownPress = (paymentID) => {
+    setSelectedPaymentId(paymentID);
+    setIsModalDownVisible(true);
   };
 
   const create = (path, name, value) => {
@@ -100,10 +113,29 @@ export default function UserForm({ route }) {
         "Amount",
         orderAmount
       );
-      setIsModalVisible(false); // Close the modal after accepting
+      setIsModalUpVisible(false); // Close the modal after accepting
     } else {
       // Handle case where orderAmount is null (not yet filled)
       console.log("Please enter order amount");
+    }
+  };
+
+  //Xứ lý bật tắt date picker
+  const toggleDatePicker = () => {
+    setShowPicker(true);
+  };
+
+  const onChangeDate = ({ type }, selectedDate) => {
+    if ((type = "set")) {
+      const currentDate = selectedDate;
+      setDate(currentDate);
+
+      if (Platform.OS === "android") {
+        toggleDatePicker();
+        setDateOfBirth(currentDate.toString());
+      }
+    } else {
+      toggleDatePicker();
     }
   };
 
@@ -119,6 +151,7 @@ export default function UserForm({ route }) {
         >
           {/* header */}
           <View style={[styles.flex, styles.black]}>
+            <Text style={[styles.br_20]}></Text>
             <ImageBackground
               source={require("../assets/logo.jpg")}
               style={styles.logo}
@@ -169,7 +202,7 @@ export default function UserForm({ route }) {
                     {listBooking[bookingKey].Hub}
                   </Text>
                   <TouchableOpacity
-                    onPress={() => handleMorePress(bookingKey)}
+                    onPress={() => handleMoreUpPress(bookingKey)}
                     style={styles.moreButton}
                   >
                     <Text style={styles.moreButtonText}>More</Text>
@@ -197,7 +230,10 @@ export default function UserForm({ route }) {
                   <Text style={styles.title}>
                     {listPayment[paymentKey].Name}
                   </Text>
-                  <TouchableOpacity style={styles.moreButton}>
+                  <TouchableOpacity
+                    style={styles.moreButton}
+                    onPress={() => handleMoreDownPress(paymentKey)}
+                  >
                     <Text style={styles.moreButtonText}>More</Text>
                     {/* Icon cho nút More có thể thêm vào đây */}
                   </TouchableOpacity>
@@ -216,14 +252,14 @@ export default function UserForm({ route }) {
           </View>
 
           <Modal
-            visible={isModalVisible}
+            visible={isModalUpVisible}
             animationType="slide"
             presentationStyle="pageSheet"
           >
             <View style={styles.modalContainer}>
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={() => setIsModalVisible(false)}
+                onPress={() => setIsModalUpVisible(false)}
               >
                 <Text style={styles.closeButtonText}>X</Text>
               </TouchableOpacity>
@@ -289,9 +325,7 @@ export default function UserForm({ route }) {
                 {/* Drop box ở đây */}
                 <View style={[styles.containerDropDown, styles.flex_row]}>
                   <TextInput
-                    onChange={(text) => {
-                      setOrder(text);
-                    }}
+                    onChange={(text) => {}}
                     style={styles.detailInput}
                     placeholder="nhập nội dung chi tiết"
                   ></TextInput>
@@ -306,11 +340,13 @@ export default function UserForm({ route }) {
               <View
                 style={{
                   backgroundColor: "#E7E7E7",
-                  paddingHorizontal: 120,
-                  paddingVertical: 30,
+                  width: "60%",
+                  height: 100,
+                  paddingVertical: 35,
                 }}
               >
                 <TextInput
+                  textAlign="center"
                   style={{ fontSize: 30 }}
                   onChangeText={(text) => setOrderAmount(text)} // Update orderAmount when text changes
                   value={orderAmount} // Set the value of TextInput to orderAmount
@@ -320,6 +356,115 @@ export default function UserForm({ route }) {
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   onPress={handlePress} // Call handlePress when button is pressed
+                  style={[styles.buttonModal, { backgroundColor: "#009470" }]}
+                >
+                  <Text style={styles.modalButtonText}>Chấp nhận</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.buttonModal, { backgroundColor: "red" }]}
+                >
+                  <Text style={styles.modalButtonText}>Hủy</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
+          <Modal
+            visible={isModalDownVisible}
+            animationType="slide"
+            presentationStyle="pageSheet"
+          >
+            <View style={styles.modalContainer}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setIsModalDownVisible(false)}
+              >
+                <Text style={styles.closeButtonText}>X</Text>
+              </TouchableOpacity>
+              <Text style={{ fontSize: 16 }}>Review and Confirm</Text>
+
+              {/* Add your modal content here */}
+              <ImageBackground
+                source={require("../assets/logo.jpg")}
+                style={styles.avatar}
+              />
+              <Text style={styles.userNameModal}>
+                {selectedPaymentId && listPayment[selectedPaymentId].Name}
+              </Text>
+              <Text style={styles.userEmailModal}>
+                {selectedPaymentId && listPayment[selectedPaymentId].Number}
+              </Text>
+
+              <View style={styles.formContainer}>
+                <Text style={{ padding: 10, fontSize: 16, marginLeft: 26 }}>
+                  Tên:
+                </Text>
+                {/* Drop box ở đây */}
+                <View style={[styles.containerDropDown]}>
+                  <TextInput
+                    style={[styles.detailInput]}
+                    placeholder="cả họ và tên"
+                  ></TextInput>
+                </View>
+              </View>
+
+              <View style={styles.formContainer}>
+                <Text style={{ padding: 10, fontSize: 16, marginLeft: 26 }}>
+                  Ngân hàng:
+                </Text>
+                {/* Drop box ở đây */}
+                <View style={[styles.containerDropDown]}>
+                  <TextInput
+                    style={[styles.detailInput, { width: "82%" }]}
+                    placeholder="Chi nhánh"
+                  ></TextInput>
+                </View>
+              </View>
+
+              <View style={styles.formContainer}>
+                <Text style={{ padding: 10, fontSize: 16, marginLeft: 26 }}>
+                  STK
+                </Text>
+                {/* Drop box ở đây */}
+                <View style={[styles.containerDropDown]}>
+                  <TextInput style={[styles.detailInput]}></TextInput>
+                </View>
+              </View>
+
+              <View style={styles.formContainer}>
+                <Text style={{ padding: 10, fontSize: 16, marginLeft: 26 }}>
+                  Thời gian
+                </Text>
+                {/* Drop box ở đây */}
+                <View style={[styles.containerDropDown]}>
+                  <TextInput
+                    style={[styles.detailInput, { width: "84.3%" }]}
+                    placeholder="11/12/2023"
+                  ></TextInput>
+                </View>
+              </View>
+
+              <View style={{ marginVertical: "5%" }}>
+                <Text style={{ fontSize: 25, fontWeight: "bold" }}>
+                  Tổng số tiền
+                </Text>
+              </View>
+              <View
+                style={{
+                  backgroundColor: "#E7E7E7",
+                  width: "60%",
+                  height: 100,
+                  paddingVertical: 35,
+                }}
+              >
+                <TextInput
+                  textAlign="center"
+                  style={{ fontSize: 30 }}
+                ></TextInput>
+              </View>
+
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
                   style={[styles.buttonModal, { backgroundColor: "#009470" }]}
                 >
                   <Text style={styles.modalButtonText}>Chấp nhận</Text>

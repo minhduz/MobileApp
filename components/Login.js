@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  StatusBar,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Picker } from "@react-native-picker/picker";
@@ -31,60 +32,67 @@ const Login = () => {
   //() => labellingset("Admin");
 
   return (
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image
-          source={require("../assets/logo.jpg")}
-          style={styles.logoImage}
-        />
-        <Text style={styles.slogan}>New slogan</Text>
-      </View>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        onChangeText={setUsername}
-        value={username}
-      />
-      <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-      <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={data}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? "Admin" : "..."}
-        value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={(item) => {
-          setValue(item.value);
-          labellingset(item.label);
-          setIsFocus(false);
-        }}
-        renderLeftIcon={() => (
-          <AntDesign
-            style={styles.icon}
-            color={isFocus ? "blue" : "black"}
-            name="Safety"
-            size={20}
+    <>
+      <StatusBar backgroundColor="black" />
+      <Text style={{ height: "5%", backgroundColor: "black" }}></Text>
+      <View style={styles.container}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require("../assets/logo.jpg")}
+            style={styles.logoImage}
           />
-        )}
-      />
+        </View>
 
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate(labelling + "Form", { inputText: username })
-        }
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Log In</Text>
-      </TouchableOpacity>
-    </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          onChangeText={setUsername}
+          value={username}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+        />
+        <Dropdown
+          style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={data}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? "Admin" : "..."}
+          value={value}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={(item) => {
+            setValue(item.value);
+            labellingset(item.label);
+            setIsFocus(false);
+          }}
+          renderLeftIcon={() => (
+            <AntDesign
+              style={styles.icon}
+              color={isFocus ? "blue" : "black"}
+              name="Safety"
+              size={20}
+            />
+          )}
+        />
+
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(labelling + "Form", { inputText: username })
+          }
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}>Log In</Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 
@@ -95,7 +103,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "black",
     position: "relative", // Sử dụng position: "relative" để phần tử con có thể sử dụng position: "absolute" để định v
   },
   logoContainer: {
@@ -107,8 +115,8 @@ const styles = StyleSheet.create({
     paddingBottom: 200, // Chạm vào phía trên cùng của màn hình
   },
   logoImage: {
-    width: 450, // Thay đổi kích thước theo ý của bạn
-    height: 240, // Thay đổi kích thước theo ý của bạn
+    width: "100%", // Thay đổi kích thước theo ý của bạn
+    height: 250, // Thay đổi kích thước theo ý của bạn
   },
   logo: {
     fontSize: 28,
@@ -127,27 +135,30 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#fff",
     borderColor: "grey",
+    borderRadius: 5,
   },
   button: {
     width: "80%",
     height: 40,
-    backgroundColor: "black",
+    backgroundColor: "white",
     justifyContent: "center",
+    borderRadius: 5,
     alignItems: "center",
     marginTop: 20,
   },
   buttonText: {
-    color: "white",
+    color: "black",
     fontSize: 16,
   },
   dropdown: {
     height: 40,
     borderColor: "gray",
     borderWidth: 0.5,
-    borderRadius: 25,
+    borderRadius: 5,
     paddingHorizontal: 10,
     width: "80%",
     backgroundColor: "#E7E7E7",
+    marginTop: 10,
   },
   icon: {
     marginRight: 5,

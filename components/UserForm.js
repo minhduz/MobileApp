@@ -379,6 +379,7 @@ export default function UserForm({ route }) {
             horizontal={true}
             pagingEnabled={true}
             onScroll={handleScroll}
+            showsHorizontalScrollIndicator={false}
           />
           <Text style={[styles.br_20]}></Text>
           <View style={styles.dotIndicator}>{renderDotIndicator()}</View>
