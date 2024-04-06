@@ -8,6 +8,7 @@ import Start from "./components/Start";
 import Register from "./components/Register";
 import AdminForm from "./components/AdminForm";
 import KetoanForm from "./components/KetoanForm";
+import LetanForm from "./components/LetanForm";
 import UserForm from "./components/UserForm";
 import InfoPage1 from "./components/InfoPage1";
 import InfoPage2 from "./components/InfoPage2";
@@ -65,6 +66,11 @@ const StackNavigation = () => {
         <Stack.Screen
           name="KetoanForm"
           component={KetoanForm}
+          options={{ headerShown: false }}
+        />
+          <Stack.Screen
+          name="LetanForm"
+          component={LetanForm}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

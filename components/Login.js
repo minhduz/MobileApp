@@ -22,6 +22,7 @@ const Login = () => {
     { label: "Admin", value: "1" },
     { label: "User", value: "2" },
     { label: "Ketoan", value: "3" },
+    { label: "Letan", value: "4" },
   ];
 
   const [value, setValue] = useState(null);
