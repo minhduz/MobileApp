@@ -320,40 +320,54 @@ export default function UserForm({ route }) {
                 </View>
               </View>
 
-              <View style={styles.dropdownContainer}>
-                <Text style={{ padding: 10, fontSize: 16, marginLeft: 26 }}>
-                  Chi tiết:
-                </Text>
-                {/* Drop box ở đây */}
-                <View style={[styles.containerDropDown, styles.flex_row]}>
-                  <TextInput
-                    onChange={(text) => {}}
-                    style={styles.detailInput}
-                    placeholder="nhập nội dung chi tiết"
-                  ></TextInput>
-                </View>
-              </View>
+              <View style={{ flex: 1 }}>
+    <Text style={{ padding: 10, fontSize: 16 }}>
+      Tên khách hàng:
+    </Text>
+    <View style={[styles.containerDropDown]}>
+      <TextInput
+        style={[styles.detailInput, { width: '90%' }]}
+        placeholder="Họ và tên"
+      />
+    </View>
 
-              <View style={{ marginVertical: "5%" }}>
-                <Text style={{ fontSize: 25, fontWeight: "bold" }}>
-                  Tổng số tiền
-                </Text>
-              </View>
-              <View
-                style={{
-                  backgroundColor: "#E7E7E7",
-                  width: "60%",
-                  height: 100,
-                  paddingVertical: 35,
-                }}
-              >
-                <TextInput
-                  textAlign="center"
-                  style={{ fontSize: 30 }}
-                  onChangeText={(text) => setOrderAmount(text)} // Update orderAmount when text changes
-                  value={orderAmount} // Set the value of TextInput to orderAmount
-                ></TextInput>
-              </View>
+    <Text style={{ padding: 10, fontSize: 16 }}>
+      SĐT liên hệ:
+    </Text>
+    <View style={[styles.containerDropDown]}>
+      <TextInput
+        style={[styles.detailInput, { width: '90%' }]}
+        placeholder="SĐT"
+      />
+    </View>
+
+    <Text style={{ padding: 10, fontSize: 16 }}>
+      Số lượng khách:
+    </Text>
+    <View style={[styles.containerDropDown]}>
+      <TextInput style={[styles.detailInput, { width: '90%' }]} 
+       placeholder="số lượng"/>
+    </View>
+
+    <Text style={{ padding: 10, fontSize: 16 }}>
+      Thời gian-giờ:
+    </Text>
+    <View style={[styles.containerDropDown]}>
+      <TextInput
+        style={[styles.detailInput, { width: '90%' }]}
+        placeholder="11/12/2023-20h30"
+      />
+    </View>
+    <Text style={{ padding: 10, fontSize: 16 }}>
+      Các dịch vụ khác:
+    </Text>
+    <View style={[styles.containerDropDown]}>
+      <TextInput
+        style={[styles.detailInput, { width: '90%' }]}
+        placeholder="Dịch vụ thêm"
+      />
+    </View>
+  </View>
 
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
@@ -397,73 +411,51 @@ export default function UserForm({ route }) {
                 {selectedPaymentId && listPayment[selectedPaymentId].Number}
               </Text>
 
-              <View style={styles.formContainer}>
-                <Text style={{ padding: 10, fontSize: 16, marginLeft: 26 }}>
-                  Tên:
-                </Text>
-                {/* Drop box ở đây */}
-                <View style={[styles.containerDropDown]}>
-                  <TextInput
-                    style={[styles.detailInput]}
-                    placeholder="cả họ và tên"
-                  ></TextInput>
-                </View>
-              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+  <View style={{ flex: 1 }}>
+    <Text style={{ padding: 10, fontSize: 16 }}>
+      Tên:
+    </Text>
+    <View style={[styles.containerDropDown]}>
+      <TextInput
+        style={[styles.detailInput, { width: '90%' }]}
+        placeholder="Họ và tên"
+      />
+    </View>
 
-              <View style={styles.formContainer}>
-                <Text style={{ padding: 10, fontSize: 16, marginLeft: 26 }}>
-                  Ngân hàng:
-                </Text>
-                {/* Drop box ở đây */}
-                <View style={[styles.containerDropDown]}>
-                  <TextInput
-                    style={[styles.detailInput, { width: "82%" }]}
-                    placeholder="Chi nhánh"
-                  ></TextInput>
-                </View>
-              </View>
+    <Text style={{ padding: 10, fontSize: 16 }}>
+      Ngân hàng:
+    </Text>
+    <View style={[styles.containerDropDown]}>
+      <TextInput
+        style={[styles.detailInput, { width: '90%' }]}
+        placeholder="Chi nhánh"
+      />
+    </View>
 
-              <View style={styles.formContainer}>
-                <Text style={{ padding: 10, fontSize: 16, marginLeft: 26 }}>
-                  STK
-                </Text>
-                {/* Drop box ở đây */}
-                <View style={[styles.containerDropDown]}>
-                  <TextInput style={[styles.detailInput]}></TextInput>
-                </View>
-              </View>
+    <Text style={{ padding: 10, fontSize: 16 }}>
+      STK
+    </Text>
+    <View style={[styles.containerDropDown]}>
+      <TextInput style={[styles.detailInput, { width: '90%' }]} 
+       placeholder="STK"/>
+    </View>
 
-              <View style={styles.formContainer}>
-                <Text style={{ padding: 10, fontSize: 16, marginLeft: 26 }}>
-                  Thời gian
-                </Text>
-                {/* Drop box ở đây */}
-                <View style={[styles.containerDropDown]}>
-                  <TextInput
-                    style={[styles.detailInput, { width: "84.3%" }]}
-                    placeholder="11/12/2023"
-                  ></TextInput>
-                </View>
-              </View>
+    <Text style={{ padding: 10, fontSize: 16 }}>
+      Thời gian
+    </Text>
+    <View style={[styles.containerDropDown]}>
+      <TextInput
+        style={[styles.detailInput, { width: '90%' }]}
+        placeholder="11/12/2023"
+      />
+    </View>
+  </View>
 
-              <View style={{ marginVertical: "5%" }}>
-                <Text style={{ fontSize: 25, fontWeight: "bold" }}>
-                  Tổng số tiền
-                </Text>
-              </View>
-              <View
-                style={{
-                  backgroundColor: "#E7E7E7",
-                  width: "60%",
-                  height: 100,
-                  paddingVertical: 35,
-                }}
-              >
-                <TextInput
-                  textAlign="center"
-                  style={{ fontSize: 30 }}
-                ></TextInput>
-              </View>
+
+</View>
+           
+            
 
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
