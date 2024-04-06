@@ -16,6 +16,10 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import {
+  GestureHandlerRootView,
+  ScrollView as GestureHandlerScrollView,
+} from "react-native-gesture-handler";
 const Login = () => {
   const navigation = useNavigation();
   const data = [
@@ -34,67 +38,71 @@ const Login = () => {
   //() => labellingset("Admin");
 
   return (
-    <>
-      <StatusBar backgroundColor="black" />
-      <Text style={{ height: "5%", backgroundColor: "black" }}></Text>
-      <View style={styles.container}>
-        <View style={styles.logoContainer}>
+    <GestureHandlerRootView>
+      <GestureHandlerScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        backgroundColor="black"
+      >
+        <StatusBar backgroundColor="black" />
+        <View style={styles.formContainer}>
           <Image
             source={require("../assets/logo.jpg")}
             style={styles.logoImage}
           />
         </View>
+        <View style={styles.formContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            onChangeText={setUsername}
+            value={username}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+          />
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? "Admin" : "..."}
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={(item) => {
+              setValue(item.value);
+              labellingset(item.label);
+              setIsFocus(false);
+            }}
+            renderLeftIcon={() => (
+              <AntDesign
+                style={styles.icon}
+                color={isFocus ? "blue" : "black"}
+                name="Safety"
+                size={20}
+              />
+            )}
+          />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          onChangeText={setUsername}
-          value={username}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-        />
-        <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          data={data}
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? "Admin" : "..."}
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={(item) => {
-            setValue(item.value);
-            labellingset(item.label);
-            setIsFocus(false);
-          }}
-          renderLeftIcon={() => (
-            <AntDesign
-              style={styles.icon}
-              color={isFocus ? "blue" : "black"}
-              name="Safety"
-              size={20}
-            />
-          )}
-        />
-
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate(labelling + "Form", { inputText: username })
-          }
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Log In</Text>
-        </TouchableOpacity>
-      </View>
-    </>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate(labelling + "Form", { inputText: username })
+            }
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Log In</Text>
+          </TouchableOpacity>
+        </View>
+      </GestureHandlerScrollView>
+    </GestureHandlerRootView>
   );
 };
 
@@ -108,6 +116,12 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     position: "relative", // Sử dụng position: "relative" để phần tử con có thể sử dụng position: "absolute" để định v
   },
+  formContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+  },
+  scrollView: {},
   logoContainer: {
     width: "100%", // Chiếm toàn bộ chiều rộng của màn hình
     backgroundColor: "black",

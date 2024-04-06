@@ -24,10 +24,16 @@ const Start = () => {
         source={require("../assets/logo.jpg")}
       />
       <TouchableOpacity
-        onPress={() => navigation.navigate("Carousel")}
+        onPress={() => navigation.navigate("Register")}
         style={styles.buttonContainer}
       >
-        <Text style={styles.createButton}>Trải nghiệm ngay</Text>
+        <Text style={styles.createButton}>Đăng ký</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Login")}
+        style={styles.buttonContainer}
+      >
+        <Text style={styles.createButton}>Đăng nhập</Text>
       </TouchableOpacity>
     </View>
   );
@@ -37,12 +43,12 @@ export default Start;
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    marginVertical: 20,
+    marginVertical: 10,
     marginHorizontal: 20,
     backgroundColor: "white",
     borderRadius: 15,
     paddingVertical: 30,
-    top: 300,
+    top: "25%",
   },
   createButton: {
     fontSize: 26,
